@@ -1,0 +1,30 @@
+from django.contrib import admin
+from .models import *
+
+from django.db.models.signals import post_save
+
+admin.site.register(Node)
+admin.site.register(Location)
+admin.site.register(LocationChange)
+admin.site.register(CurrentLocation)
+admin.site.register(Description)
+admin.site.register(DescriptionChange)
+admin.site.register(CurrentDescription)
+admin.site.register(SSHConfig)
+admin.site.register(SSHConfigChange)
+admin.site.register(CurrentSSHConfig)
+admin.site.register(SSLCert)
+admin.site.register(SSLCertChange)
+admin.site.register(CurrentSSLCert)
+admin.site.register(TelephonyIDs)
+admin.site.register(TelephonyIDsChange)
+admin.site.register(CurrentTelephonyIDs)
+admin.site.register(State)
+admin.site.register(StateChange)
+admin.site.register(CurrentState)
+admin.site.register(Hardware)
+admin.site.register(HardwareChange)
+admin.site.register(CurrentHardware)
+admin.site.register(Software)
+admin.site.register(SoftwareChange)
+admin.site.register(CurrentSoftware)
