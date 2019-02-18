@@ -10,7 +10,7 @@ import pytz
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand, CommandError
 
-from nodes.models import Tag, Node, Location, Description, SSHConfig
+from nodes.models import Tag, Node, Location, Description, State, SSHConfig
 
 
 info_url = 'https://www.mcs.anl.gov/research/projects/waggle/downloads/beehive1/node-info.txt'
@@ -20,8 +20,9 @@ tarball_url = 'https://www.mcs.anl.gov/research/projects/waggle/downloads/datase
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        # self.download_tarball_and_rip_nodes()
+        self.download_tarball_and_rip_nodes()
         self.get_port_numbers()
+        self.tag_nodes()
 
     def download_tarball_and_rip_nodes(self):
         self.stdout.write('Downloading chicago tarball and adding nodes, locations and descriptions')
@@ -47,6 +48,8 @@ class Command(BaseCommand):
 
                 Description.objects.create(node=node, description=row['description'], effective_as_of=datetime.now().replace(tzinfo=pytz.UTC))
                 self.stdout.write('  - created description')
+
+                State.objects.create(node=node, state='deployed', effective_as_of=datetime.now().replace(tzinfo=pytz.UTC))
         
         os.remove(tarball_name)
         shutil.rmtree(dirname)
@@ -69,3 +72,9 @@ class Command(BaseCommand):
                         node = nodes.get(vsn)
                         SSHConfig.objects.create(node=node, port=port, effective_as_of=datetime.now().replace(tzinfo=pytz.UTC))
                         self.stdout.write(f'- created port for {vsn}')
+
+    def tag_nodes(self):
+        tag = Tag.objects.create(name='Chicago', slug='chicago')
+
+        for node in Node.objects.all():
+            node.tags.add(tag)

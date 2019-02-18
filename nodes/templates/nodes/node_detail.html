@@ -1,0 +1,82 @@
+{% extends 'waggle_manager/base.html' %}
+
+{% block content %}
+
+<h2>
+    Node {{ node }} <span class="small">[{{node.id}}]</span>
+    <a href="{% url 'nodes:edit' node.vsn %}" class="float-right btn btn-outline-danger">Edit</a>
+</h2>
+
+<table class="table">
+    <tr>
+        <th>State</th>
+        <td>{{ node.current_state.state|default:'-' }}</td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Location</th>
+        <td>
+            {{ node.current_location.address|default:'-' }}<br>
+            {{ node.current_location.location|default:'-' }}
+        </td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ node.current_description.description|default:'-' }}</td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>SSH Config</th>
+        <td>Port {{ node.current_ssh_config.port|default:'-' }}</td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Hardware</th>
+        <td>
+            {% for hardware in node.current_hardware.all %}
+            {{ hardware.instance }}
+            {% endfor %}
+        </td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Software</th>
+        <td>
+            {% for software in node.current_software.all %}
+            {{ software.software }}<br>
+            {% endfor %}
+        </td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+    <tr>
+        <th>Tags</th>
+        <td>{% for tag in node.tags.all %}{{ tag.name }}{% endfor %}</td>
+        <td style="text-align: right">
+            <a href="#" class="btn btn-sm btn-outline-danger">Edit</a>
+            <a href="#" class="btn btn-sm btn-secondary">View History</a>
+        </td>
+    </tr>
+</table>
+
+<a href="{% url 'nodes:list' %}" class="float-right btn btn-outline-success">Back to List</a>
+
+{% endblock %}

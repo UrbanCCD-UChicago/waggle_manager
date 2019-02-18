@@ -36,7 +36,7 @@ class SoftwareChange(models.Model):
 
 class CurrentSoftware(models.Model):
 
-    node = models.ForeignKey('nodes.Node', on_delete=C, null=False)
+    node = models.ForeignKey('nodes.Node', on_delete=C, null=False, related_name='current_software')
     software = models.ForeignKey('software.Software', on_delete=P, null=False)
     effective_as_of = models.DateTimeField(null=False)
 

@@ -1,0 +1,8 @@
+{% load crispy_forms_tags %}
+
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-outline-success" value="Submit">
+    <a href="{{ cancel_href }}" class="float-right btn btn-outline-danger">Cancel</a>
+</form>

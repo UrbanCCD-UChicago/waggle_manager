@@ -1,0 +1,8 @@
+{% extends 'waggle_manager/base.html' %}
+
+{% block content %}
+
+<h2>Edit Node {{ node }}</h2>
+
+{% include 'nodes/partials/form.html' with cancel_href=node.get_absolute_url %}
+{% endblock %}

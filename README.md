@@ -10,6 +10,20 @@ works out we can just roll with it.
 
 ## Development
 
+Here's a quick start for the impatient:
+
+```bash
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_DB=waggle_manager -d mdillon/postgis
+pipenv install
+pipenv install --dev
+pipenv run python manage.py migrate
+pipenv run python manage.py createsuperuser
+pipenv run python manage.py seed
+pipenv run python manage.py runserver
+```
+
+And then hit http://localhost:8000/nodes
+
 ### Pipenv for dependency management
 
 Why? Because packaging and dependency management is broken beyond belief

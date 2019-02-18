@@ -1,0 +1,33 @@
+{% extends 'waggle_manager/base.html' %}
+
+{% block content %}
+<h2>
+    Nodes
+    <a href="{% url 'nodes:create' %}" class="float-right btn btn-outline-success">Create a new Node</a>
+</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>VSN</th>
+            <th>ID</th>
+            <th>State</th>
+            <th>Port</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for node in nodes %}
+        <tr>
+            <td>{{ node.vsn }}</td>
+            <td>{{ node.id }}</td>
+            <td>{{ node.current_state.state }}</td>
+            <td>{{ node.current_ssh_config.port }}</td>
+            <td>{{ node.current_location.address }}</td>
+            <td><a href="{{ node.get_absolute_url }}" class="btn btn-sm btn-outline-success">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

@@ -10,8 +10,8 @@ class Location(models.Model):
 
     node = models.ForeignKey('nodes.Node', on_delete=C, null=False)
     effective_as_of = models.DateTimeField(null=False)
-    location = PointField(null=True, default=None, blank=True)
-    address = models.CharField(max_length=255, null=True, default=None, blank=True)
+    location = PointField(null=False, default=None, blank=True)
+    address = models.CharField(max_length=255, null=False, default=None, blank=True)
     altitude = models.FloatField(null=True, default=None, blank=True)
     elevation = models.FloatField(null=True, default=None, blank=True)
     orientation = JSONField(null=True, default=None, blank=True)
@@ -43,7 +43,8 @@ class CurrentLocation(models.Model):
 
     node = models.OneToOneField('nodes.Node', on_delete=C, related_name='current_location')
     effective_as_of = models.DateTimeField(null=False)
-    location = PointField(null=False)
+    location = PointField(null=False, default=None, blank=True)
+    address = models.CharField(max_length=255, null=False, default=None, blank=True)
     altitude = models.FloatField(null=True, default=None, blank=True)
     elevation = models.FloatField(null=True, default=None, blank=True)
     orientation = JSONField(null=True, default=None, blank=True)
@@ -56,7 +57,7 @@ class CurrentLocation(models.Model):
     def create_materialized_view():
         return """
         CREATE MATERIALIZED VIEW node_current_locations AS
-            SELECT id, node_id, location, altitude, elevation, orientation, effective_as_of
+            SELECT id, node_id, location, address, altitude, elevation, orientation, effective_as_of
             FROM node_locations
             WHERE id NOT IN (
                 SELECT DISTINCT old_location_id
