@@ -44,7 +44,19 @@ class CurrentCalibration(models.Model):
         db_table = 'hardware_current_calibrations'
 
     @staticmethod
-    def refresh_materialized_view(*abs, **kwargs):
+    def create_materialized_view():
+        return """
+        CREATE MATERIALIZED VIEW hardware_current_calibrations AS
+            SELECT id, instance_id, value, effective_as_of
+            FROM hardware_calibrations
+            WHERE id NOT IN (
+                SELECT DISTINCT old_calibration_id
+                FROM hardware_calibration_changes
+            )
+        """
+
+    @staticmethod
+    def refresh_materialized_view(*args, **kwargs):
         with connection.cursor() as cursor:
             cursor.execute('REFRESH MATERIALIZED VIEW hardware_current_calibrations')
 

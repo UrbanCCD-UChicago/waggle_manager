@@ -8,7 +8,7 @@ class Subsystem(models.Model):
 
     parent = models.ForeignKey('hardware.Component', on_delete=P, related_name='as_subsystem_parent_set', null=False)
     child = models.ForeignKey('hardware.Component', on_delete=C, related_name='as_subsystem_child_set', null=False)
-    child_quantity = models.PositiveIntegerField(null=False)
+    child_quantity = models.PositiveIntegerField(null=False, default=1)
 
     class Meta:
         db_table = 'hardware_subsystems'

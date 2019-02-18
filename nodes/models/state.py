@@ -58,7 +58,19 @@ class CurrentState(models.Model):
         db_table = 'node_current_states'
 
     @staticmethod
-    def refresh_materialized_view(*abs, **kwargs):
+    def create_materialized_view():
+        return """
+        CREATE MATERIALIZED VIEW node_current_states AS
+            SELECT id, node_id, state, effective_as_of
+            FROM node_states
+            WHERE id NOT IN (
+                SELECT DISTINCT old_state_id
+                FROM node_state_changes
+            )
+        """
+
+    @staticmethod
+    def refresh_materialized_view(*args, **kwargs):
         with connection.cursor() as cursor:
             cursor.execute(
                 'REFRESH MATERIALIZED VIEW node_current_states')

@@ -45,7 +45,19 @@ class CurrentSoftware(models.Model):
         db_table = 'node_current_software'
 
     @staticmethod
-    def refresh_materialized_view(*abs, **kwargs):
+    def create_materialized_view():
+        return """
+        CREATE MATERIALIZED VIEW node_current_software AS
+            SELECT id, node_id, software_id, effective_as_of
+            FROM node_software
+            WHERE id NOT IN (
+                SELECT DISTINCT old_software_id
+                FROM node_software_changes
+            )
+        """
+
+    @staticmethod
+    def refresh_materialized_view(*args, **kwargs):
         with connection.cursor() as cursor:
             cursor.execute(
                 'REFRESH MATERIALIZED VIEW node_current_software')

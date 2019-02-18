@@ -46,7 +46,19 @@ class CurrentSSHConfig(models.Model):
         db_table = 'node_current_ssh_configs'
 
     @staticmethod
-    def refresh_materialized_view(*abs, **kwargs):
+    def create_materialized_view():
+        return """
+        CREATE MATERIALIZED VIEW node_current_ssh_configs AS
+            SELECT id, node_id, port, key, effective_as_of
+            FROM node_ssh_configs
+            WHERE id NOT IN (
+                SELECT DISTINCT old_ssh_config_id
+                FROM node_ssh_config_changes
+            )
+        """
+
+    @staticmethod
+    def refresh_materialized_view(*args, **kwargs):
         with connection.cursor() as cursor:
             cursor.execute(
                 'REFRESH MATERIALIZED VIEW node_current_ssh_configs')

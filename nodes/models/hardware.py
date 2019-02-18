@@ -45,7 +45,19 @@ class CurrentHardware(models.Model):
         db_table = 'node_current_hardware'
 
     @staticmethod
-    def refresh_materialized_view(*abs, **kwargs):
+    def create_materialized_view():
+        return """
+        CREATE MATERIALIZED VIEW node_current_hardware AS
+            SELECT id, node_id, instance_id, effective_as_of
+            FROM node_hardware
+            WHERE id NOT IN (
+                SELECT DISTINCT old_instance_id
+                FROM node_hardware_changes
+            )
+        """
+
+    @staticmethod
+    def refresh_materialized_view(*args, **kwargs):
         with connection.cursor() as cursor:
             cursor.execute(
                 'REFRESH MATERIALIZED VIEW node_current_hardware')
